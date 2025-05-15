@@ -1,0 +1,50 @@
+name: Build and Deploy
+
+on:
+  push:
+    # branches: [ main ]
+    # Publish semver tags as releases.
+    tags: [ 'v*.*.*' ]
+
+jobs:
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repo
+        uses: actions/checkout@master
+      - name: Build
+        run: make dist
+      - name: Archive Production Artifact
+        uses: actions/upload-artifact@master
+        with:
+          name: dist
+          path: dist
+
+  deploy-to-github:
+    name: Deploy To GitHub
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repo
+        uses: actions/checkout@master
+      - name: Download Artifact
+        uses: actions/download-artifact@master
+        with:
+          name: dist
+          path: dist
+      # - name: Create CNAME
+      #   run: echo "aruntechpro.is-a.dev" > dist/CNAME
+      - name: Add .nojekyll
+        run: touch dist/.nojekyll
+      - name: Pushes to Repository
+        uses: tech-thinker/push-to-repo@v1.0.0
+        env:
+          API_TOKEN_GITHUB: ${{ secrets.GIT_PUSH_TOKEN }}
+        with:
+          user-name: "github-actions[bot]"
+          user-email: "github-actions[bot]@users.noreply.github.com"
+          source-directory: 'dist'
+          destination-github-username: 'ahadiwasti'
+          destination-repository-name: 'ahadiwasti.github.io'
+          target-branch: pages
