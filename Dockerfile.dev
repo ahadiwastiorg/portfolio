@@ -1,0 +1,11 @@
+FROM techthinkerorg/node:20.12.1
+LABEL MAINTAINER Asif Mohammad Mollah
+
+RUN mkdir /app
+WORKDIR /app
+COPY package.json /app/package.json
+COPY entrypoint.sh /app/entrypoint.sh
+
+
+EXPOSE 3000
+ENTRYPOINT [ "/app/entrypoint.sh" ]

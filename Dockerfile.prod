@@ -1,0 +1,22 @@
+FROM techthinkerorg/node:20.12.1 as builder
+LABEL MAINTAINER Asif Mohammad Mollah
+
+RUN mkdir /app
+WORKDIR /app
+COPY package.json /app/package.json
+COPY package-lock.json /app/package-lock.json
+RUN npm install --force
+
+COPY . /app/
+RUN npm run build
+
+# Prepare production image
+FROM nginx:stable-alpine
+
+RUN mkdir /app
+WORKDIR /app
+COPY --from=builder /app/out /app
+
+COPY .nginx/nginx.conf /etc/nginx/conf.d/default.conf
+EXPOSE 3000
+CMD ["nginx", "-g", "daemon off;"]

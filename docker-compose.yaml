@@ -1,0 +1,16 @@
+version: "3"
+services:
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    container_name: arun-portfolio
+    ports:
+      - "3000:3000"
+    volumes:
+      - .:/app
+    networks:
+      - arun-portfolio_net
+
+networks:
+  arun-portfolio_net:
