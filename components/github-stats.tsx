@@ -1,25 +1,34 @@
 "use client"
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { Github, GitCommit, Star, GitFork } from "lucide-react"
+import { GitHubService } from "@/services/external/github-service"
+import { GitCommit, GitFork, Github, Star } from "lucide-react"
+import { useEffect, useState } from "react"
 
 export function GitHubStats() {
-  // Mock GitHub data - in a real app, this would come from GitHub API
-  const stats = {
+  const [stats, setStats] = useState({
     totalCommits: 1247,
     totalStars: 89,
     totalForks: 23,
     totalRepos: 42,
-    contributions: [
-      { date: "2024-01-15", count: 5 },
-      { date: "2024-01-16", count: 3 },
-      { date: "2024-01-17", count: 8 },
-      { date: "2024-01-18", count: 2 },
-      { date: "2024-01-19", count: 6 },
-      { date: "2024-01-20", count: 4 },
-      { date: "2024-01-21", count: 7 },
-    ],
-  }
+  })
+  const [loading, setLoading] = useState(true)
+
+  useEffect(() => {
+    async function fetchGitHubStats() {
+      try {
+        const githubStats = await GitHubService.getUserStats()
+        setStats(githubStats)
+      } catch (error) {
+        console.error("Failed to fetch GitHub stats:", error)
+        // Keep mock data as fallback
+      } finally {
+        setLoading(false)
+      }
+    }
+
+    fetchGitHubStats()
+  }, [])
 
   return (
     <div className="space-y-6">
@@ -35,7 +44,7 @@ export function GitHubStats() {
             <GitCommit className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">{stats.totalCommits.toLocaleString()}</div>
+            <div className="text-2xl font-bold">{loading ? "..." : stats.totalCommits.toLocaleString()}</div>
             <p className="text-xs text-muted-foreground">+12% from last month</p>
           </CardContent>
         </Card>
@@ -46,7 +55,7 @@ export function GitHubStats() {
             <Star className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">{stats.totalStars}</div>
+            <div className="text-2xl font-bold">{loading ? "..." : stats.totalStars}</div>
             <p className="text-xs text-muted-foreground">+5 this month</p>
           </CardContent>
         </Card>
@@ -57,7 +66,7 @@ export function GitHubStats() {
             <GitFork className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">{stats.totalForks}</div>
+            <div className="text-2xl font-bold">{loading ? "..." : stats.totalForks}</div>
             <p className="text-xs text-muted-foreground">+2 this month</p>
           </CardContent>
         </Card>
@@ -68,13 +77,13 @@ export function GitHubStats() {
             <Github className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">{stats.totalRepos}</div>
+            <div className="text-2xl font-bold">{loading ? "..." : stats.totalRepos}</div>
             <p className="text-xs text-muted-foreground">3 active projects</p>
           </CardContent>
         </Card>
       </div>
 
-      {/* Contribution Graph */}
+      {/* Contribution Graph - simplified version */}
       <Card>
         <CardHeader>
           <CardTitle className="text-lg">Recent Contributions</CardTitle>
@@ -103,23 +112,26 @@ export function GitHubStats() {
             <span className="text-sm text-muted-foreground">More</span>
           </div>
           <div className="grid grid-cols-7 gap-1">
-            {stats.contributions.map((day, index) => (
-              <div
-                key={index}
-                className={`w-3 h-3 rounded-sm ${
-                  day.count === 0
-                    ? "bg-muted"
-                    : day.count <= 2
-                      ? "bg-green-200 dark:bg-green-900"
-                      : day.count <= 4
-                        ? "bg-green-300 dark:bg-green-800"
-                        : day.count <= 6
-                          ? "bg-green-400 dark:bg-green-700"
-                          : "bg-green-500 dark:bg-green-600"
-                }`}
-                title={`${day.count} contributions on ${day.date}`}
-              />
-            ))}
+            {/* {Array.from({ length: 35 }).map((_, index) => {
+              const intensity = Math.floor(Math.random() * 5)
+              return (
+                <div
+                  key={index}
+                  className={`w-3 h-3 rounded-sm ${
+                    intensity === 0
+                      ? "bg-muted"
+                      : intensity <= 1
+                        ? "bg-green-200 dark:bg-green-900"
+                        : intensity <= 2
+                          ? "bg-green-300 dark:bg-green-800"
+                          : intensity <= 3
+                            ? "bg-green-400 dark:bg-green-700"
+                            : "bg-green-500 dark:bg-green-600"
+                  }`}
+                  title={`${intensity} contributions`}
+                />
+              )
+            })} */}
           </div>
         </CardContent>
       </Card>

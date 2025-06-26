@@ -6,7 +6,9 @@ import Link from "next/link"
 
 const blogPosts = [
   {
+    id: "1",
     title: "Building Scalable Microservices with Golang",
+    slug: "building-scalable-microservices-golang",
     excerpt:
       "Learn how to design and implement microservices architecture using Golang, Docker, and Kubernetes for maximum scalability.",
     date: "2024-01-15",
@@ -15,7 +17,9 @@ const blogPosts = [
     image: "/placeholder.svg?height=200&width=300",
   },
   {
+    id: "2",
     title: "React Performance Optimization Techniques",
+    slug: "react-performance-optimization-techniques",
     excerpt: "Discover advanced techniques to optimize React applications for better performance and user experience.",
     date: "2024-01-10",
     readTime: "6 min read",
@@ -23,16 +27,19 @@ const blogPosts = [
     image: "/placeholder.svg?height=200&width=300",
   },
   {
-    title: "AWS Lambda Best Practices for Serverless Applications",
-    excerpt:
-      "A comprehensive guide to building efficient serverless applications using AWS Lambda and related services.",
+    id: "3",
+    title: "Understanding Modern Electronics: IoT and Edge Computing",
+    slug: "understanding-modern-electronics-iot-edge-computing",
+    excerpt: "Explore the intersection of electronics, IoT devices, and edge computing in today's connected world.",
     date: "2024-01-05",
-    readTime: "10 min read",
-    tags: ["AWS", "Lambda", "Serverless", "Cloud"],
+    readTime: "7 min read",
+    tags: ["Electronics", "IoT", "Edge Computing", "Hardware"],
     image: "/placeholder.svg?height=200&width=300",
   },
   {
+    id: "4",
     title: "Database Design Patterns for Modern Applications",
+    slug: "database-design-patterns-modern-applications",
     excerpt: "Explore different database design patterns and when to use them in modern web applications.",
     date: "2023-12-28",
     readTime: "7 min read",
@@ -57,13 +64,15 @@ export function BlogSection() {
       <div className="grid gap-6 md:grid-cols-2">
         {blogPosts.map((post, index) => (
           <Card key={index} className="group hover:shadow-lg transition-all duration-300">
-            <div className="aspect-video w-full overflow-hidden rounded-t-lg">
-              <img
-                src={post.image || "/placeholder.svg"}
-                alt={post.title}
-                className="h-full w-full object-cover transition-all group-hover:scale-105"
-              />
-            </div>
+            <Link href={`/blog/${post.slug}`} className="block">
+              <div className="aspect-video w-full overflow-hidden rounded-t-lg">
+                <img
+                  src={post.image || "/placeholder.svg"}
+                  alt={post.title}
+                  className="h-full w-full object-cover transition-all group-hover:scale-105"
+                />
+              </div>
+            </Link>
             <CardHeader>
               <div className="flex items-center gap-4 text-sm text-muted-foreground mb-2">
                 <div className="flex items-center gap-1">
@@ -75,7 +84,9 @@ export function BlogSection() {
                   {post.readTime}
                 </div>
               </div>
-              <CardTitle className="group-hover:text-primary transition-colors">{post.title}</CardTitle>
+              <Link href={`/blog/${post.slug}`}>
+                <CardTitle className="group-hover:text-primary transition-colors">{post.title}</CardTitle>
+              </Link>
               <CardDescription>{post.excerpt}</CardDescription>
             </CardHeader>
             <CardContent>
@@ -86,9 +97,11 @@ export function BlogSection() {
                   </Badge>
                 ))}
               </div>
-              <Button variant="ghost" className="p-0 h-auto font-medium group-hover:text-primary">
-                Read more
-                <ArrowRight className="h-4 w-4 ml-2 transition-transform group-hover:translate-x-1" />
+              <Button variant="ghost" className="p-0 h-auto font-medium group-hover:text-primary" asChild>
+                <Link href={`/blog/${post.slug}`}>
+                  Read more
+                  <ArrowRight className="h-4 w-4 ml-2 transition-transform group-hover:translate-x-1" />
+                </Link>
               </Button>
             </CardContent>
           </Card>
@@ -97,7 +110,7 @@ export function BlogSection() {
 
       <div className="text-center">
         <Button variant="outline" size="lg" asChild>
-          <Link href="/blog">View All Articles</Link>
+          <Link href="/blog/all">View All Articles</Link>
         </Button>
       </div>
     </div>
