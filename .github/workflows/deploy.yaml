@@ -34,7 +34,9 @@ jobs:
           name: dist
           path: dist
       - name: Create CNAME
-        run: echo "ahadiwasti.com" > dist/CNAME
+        run: |
+          echo "ahadiwasti.com" > dist/CNAME
+          echo "node_modules" > dist/.gitignore
       - name: Add .nojekyll
         run: touch dist/.nojekyll
       - name: Push dist/ to GitHub Pages repo
@@ -43,7 +45,7 @@ jobs:
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
 
           cd dist
-
+        
           git init
           git remote add origin https://x-access-token:${{ secrets.GIT_PUSH_TOKEN }}@github.com/ahadiwasti/ahadiwasti.github.io.git
           git checkout -b pages
