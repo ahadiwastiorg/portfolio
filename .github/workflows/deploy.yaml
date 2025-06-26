@@ -37,14 +37,17 @@ jobs:
         run: echo "ahadiwasti.com" > dist/CNAME
       - name: Add .nojekyll
         run: touch dist/.nojekyll
-      - name: Pushes to Repository
-        uses: ahadiwasti/ahadiwasti.github.io@v1.0.0
-        env:
-          API_TOKEN_GITHUB: ${{ secrets.GIT_PUSH_TOKEN }}
-        with:
-          user-name: "github-actions[bot]"
-          user-email: "github-actions[bot]@users.noreply.github.com"
-          source-directory: 'dist'
-          destination-github-username: 'ahadiwasti'
-          destination-repository-name: 'ahadiwasti.github.io'
-          target-branch: pages
+      - name: Push dist/ to GitHub Pages repo
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+
+          cd dist
+
+          git init
+          git remote add origin https://x-access-token:${{ secrets.GIT_PUSH_TOKEN }}@github.com/ahadiwasti/ahadiwasti.github.io.git
+          git checkout -b pages
+
+          git add .
+          git commit -m "Deploying to GitHub Pages from CI"
+          git push --force origin pages
