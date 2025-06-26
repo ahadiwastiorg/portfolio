@@ -1,5 +1,5 @@
 FROM techthinkerorg/node:20.12.1 as builder
-LABEL MAINTAINER Asif Mohammad Mollah
+LABEL MAINTAINER Abdul Hadi <hi@ahadiwasti.com>
 
 RUN mkdir /app
 WORKDIR /app

@@ -1,7 +1,7 @@
 "use client"
 
 import { AdminSidebar } from "@/components/admin/admin-sidebar"
-import { CoursesManagement } from "@/components/admin/courses-management"
+// import { CoursesManagement } from "@/components/admin/courses-management"
 import { useSession } from "@/hooks/use-session"
 import { useRouter } from "next/navigation"
 import { useEffect } from "react"
@@ -33,7 +33,7 @@ export default function AdminCoursesPage() {
       <div className="flex">
         <AdminSidebar />
         <main className="flex-1 p-6">
-          <CoursesManagement />
+          {/* <CoursesManagement /> */}
         </main>
       </div>
     </div>

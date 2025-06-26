@@ -1,6 +1,6 @@
-import { CourseDetail } from "@/components/courses/course-detail"
-import { Header } from "@/components/layout/header"
+// import { CourseDetail } from "@/components/courses/course-detail"
 import { Footer } from "@/components/layout/footer"
+import { Header } from "@/components/layout/header"
 
 interface CoursePageProps {
   params: {
@@ -13,7 +13,7 @@ export default function CoursePage({ params }: CoursePageProps) {
     <div className="min-h-screen bg-background">
       <Header />
       <main className="pt-20">
-        <CourseDetail courseSlug={params.slug} />
+        {/* <CourseDetail courseSlug={params.slug} /> */}
       </main>
       <Footer />
     </div>
