@@ -1,9 +1,9 @@
 "use client"
 
-import { CommentsSection } from "@/components/learn/comments-section"
-import { LessonResources } from "@/components/learn/lesson-resources"
-import { LessonSidebar } from "@/components/learn/lesson-sidebar"
-import { VideoPlayer } from "@/components/learn/video-player"
+// import { CommentsSection } from "@/components/learn/comments-section"
+// import { LessonResources } from "@/components/learn/lesson-resources"
+// import { LessonSidebar } from "@/components/learn/lesson-sidebar"
+// import { VideoPlayer } from "@/components/learn/video-player"
 import { Button } from "@/components/ui/button"
 import { useSession } from "@/hooks/use-session"
 import { ArrowLeft, Lock } from "lucide-react"
@@ -113,7 +113,7 @@ export default function LearnPage({ params }: LearnPageProps) {
 
       <div className="grid lg:grid-cols-4 gap-6 p-6">
         <div className="lg:col-span-3 space-y-6">
-          <VideoPlayer
+          {/* <VideoPlayer
             videoUrl={lesson?.videoUrl}
             title={lesson?.title}
             onProgress={(progress) => {
@@ -130,23 +130,23 @@ export default function LearnPage({ params }: LearnPageProps) {
                 })
               }
             }}
-          />
+          /> */}
 
           <div className="bg-card rounded-lg p-6">
             <h2 className="text-xl font-semibold mb-4">About this lesson</h2>
             <p className="text-muted-foreground">{lesson?.description}</p>
           </div>
 
-          <LessonResources resources={lesson?.resources || []} />
-          <CommentsSection lessonId={params.lessonId} />
+          {/* <LessonResources resources={lesson?.resources || []} />
+          <CommentsSection lessonId={params.lessonId} /> */}
         </div>
 
         <div className="lg:col-span-1">
-          <LessonSidebar
+          {/* <LessonSidebar
             course={course}
             currentLessonId={params.lessonId}
             userProgress={[]} // TODO: Fetch user progress
-          />
+          /> */}
         </div>
       </div>
     </div>
