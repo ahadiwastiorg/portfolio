@@ -38,7 +38,7 @@ jobs:
       - name: Add .nojekyll
         run: touch dist/.nojekyll
       - name: Pushes to Repository
-        uses: ahadiwasti/ahadiwasti.github.io
+        uses: ahadiwasti/ahadiwasti.github.io@v1.0.0
         env:
           API_TOKEN_GITHUB: ${{ secrets.GIT_PUSH_TOKEN }}
         with:
