@@ -2,13 +2,15 @@
 
 import type React from "react"
 
-import { useState } from "react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import { Textarea } from "@/components/ui/textarea"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
+import { Textarea } from "@/components/ui/textarea"
 import { toast } from "@/hooks/use-toast"
+import type { ContactFormData } from "@/services/external/email-service"
+import { NotificationService } from "@/services/notification-service"
+import { useState } from "react"
 
 export function ContactForm() {
   const [isSubmitting, setIsSubmitting] = useState(false)
@@ -17,16 +19,39 @@ export function ContactForm() {
     e.preventDefault()
     setIsSubmitting(true)
 
-    // Simulate form submission
-    setTimeout(() => {
+    try {
+      const formData = new FormData(e.currentTarget)
+
+      const contactData: ContactFormData = {
+        firstName: formData.get("firstName") as string,
+        lastName: formData.get("lastName") as string,
+        email: formData.get("email") as string,
+        company: formData.get("company") as string,
+        projectType: formData.get("projectType") as string,
+        budget: formData.get("budget") as string,
+        message: formData.get("message") as string,
+      }
+
+      const success = await NotificationService.handleContactFormSubmission(contactData)
+
+      if (success) {
+        toast({
+          title: "Message sent!",
+          description: "Thank you for your message. I'll get back to you within 24 hours.",
+        })
+        e.currentTarget.reset()
+      } else {
+        throw new Error("Failed to send message")
+      }
+    } catch (error) {
       toast({
-        title: "Message sent!",
-        description: "Thank you for your message. I'll get back to you within 24 hours.",
+        title: "Error",
+        description: "Failed to send message. Please try again.",
+        variant: "destructive",
       })
+    } finally {
       setIsSubmitting(false)
-      // Reset form
-      e.currentTarget.reset()
-    }, 1500)
+    }
   }
 
   return (
@@ -34,24 +59,24 @@ export function ContactForm() {
       <div className="grid gap-4 md:grid-cols-2">
         <div className="space-y-2">
           <Label htmlFor="firstName">First Name</Label>
-          <Input id="firstName" placeholder="Your first name" required />
+          <Input id="firstName" name="firstName" placeholder="Your first name" required />
         </div>
         <div className="space-y-2">
           <Label htmlFor="lastName">Last Name</Label>
-          <Input id="lastName" placeholder="Your last name" required />
+          <Input id="lastName" name="lastName" placeholder="Your last name" required />
         </div>
       </div>
       <div className="space-y-2">
         <Label htmlFor="email">Email</Label>
-        <Input id="email" type="email" placeholder="your.email@example.com" required />
+        <Input id="email" name="email" type="email" placeholder="your.email@example.com" required />
       </div>
       <div className="space-y-2">
         <Label htmlFor="company">Company</Label>
-        <Input id="company" placeholder="Your company (optional)" />
+        <Input id="company" name="company" placeholder="Your company (optional)" />
       </div>
       <div className="space-y-2">
         <Label htmlFor="projectType">Project Type</Label>
-        <Select>
+        <Select name="projectType" required>
           <SelectTrigger>
             <SelectValue placeholder="Select project type" />
           </SelectTrigger>
@@ -66,7 +91,7 @@ export function ContactForm() {
       </div>
       <div className="space-y-2">
         <Label htmlFor="budget">Budget Range</Label>
-        <Select>
+        <Select name="budget" required>
           <SelectTrigger>
             <SelectValue placeholder="Select budget range" />
           </SelectTrigger>
@@ -83,6 +108,7 @@ export function ContactForm() {
         <Label htmlFor="message">Message</Label>
         <Textarea
           id="message"
+          name="message"
           placeholder="Tell me about your project, requirements, and timeline..."
           className="min-h-[120px]"
           required
