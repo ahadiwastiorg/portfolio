@@ -1,5 +1,5 @@
 #!/bin/bash
-# Author: Asif Mohammad Mollah
+# Author: Abdul Hadi
 
 npm install --force
 npm run dev
