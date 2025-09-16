@@ -1,14 +1,14 @@
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
-import { Building2, TrendingUp, Code2, Rocket, Star, MapPin, Calendar } from "lucide-react"
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { Building2, Calendar, Code2, MapPin, Rocket, Star, TrendingUp } from "lucide-react"
 
 const experiences = [
   {
     id: 1,
     title: "Senior Software Engineer",
-    company: "TechCorp Solutions",
+    company: "XXX Telecom",
     location: "Dubai, UAE",
-    period: "2022 - Present",
+    period: "2019 - Present",
     type: "Full-time",
     current: true,
     icon: Building2,
@@ -26,9 +26,9 @@ const experiences = [
   {
     id: 2,
     title: "Full Stack Developer",
-    company: "InnovateTech",
+    company: "XXX Bank",
     location: "Dubai, UAE",
-    period: "2020 - 2022",
+    period: "2018 - 2019",
     type: "Full-time",
     current: false,
     icon: TrendingUp,
@@ -46,9 +46,9 @@ const experiences = [
   {
     id: 3,
     title: "Software Developer",
-    company: "Digital Solutions Ltd",
-    location: "Karachi, Pakistan",
-    period: "2018 - 2020",
+    company: "Micronox Ltd",
+    location: "Islamabad, Pakistan",
+    period: "2018 - 2018",
     type: "Full-time",
     current: false,
     icon: Code2,
@@ -66,7 +66,7 @@ const experiences = [
   {
     id: 4,
     title: "Junior Developer",
-    company: "StartupHub",
+    company: "Micronox Ltd",
     location: "Islamabad, Pakistan",
     period: "2016 - 2018",
     type: "Full-time",

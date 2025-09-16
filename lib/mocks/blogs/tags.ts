@@ -1,5 +1,3 @@
-import { NextResponse } from "next/server"
-
 const mockTags = [
   { id: "react", name: "React", count: 25 },
   { id: "nodejs", name: "Node.js", count: 20 },
@@ -23,6 +21,7 @@ const mockTags = [
   { id: "web-development", name: "Web Development", count: 20 },
 ]
 
-export async function GET() {
-  return NextResponse.json(mockTags)
+
+export function getAllTags(): Array<{ id: string; name: string; count: number }> {
+  return mockTags
 }

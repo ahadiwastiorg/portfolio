@@ -24,4 +24,8 @@ export const appConfig = {
     refreshTokenKey: "refresh_token",
     refreshThreshold: 5 * 60 * 1000, // Refresh 5 minutes before expiry
   },
+  github:{
+    username: process.env.GITHUB_USERNAME || "ahadiwasti",
+    token: process.env.GITHUB_TOKEN || "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",
+  }
 }

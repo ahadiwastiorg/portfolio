@@ -1,7 +1,7 @@
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
-import { Github, ExternalLink, Star } from "lucide-react"
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
+import { ExternalLink, Star } from "lucide-react"
 import Link from "next/link"
 
 const projects = [
@@ -394,12 +394,12 @@ export function ProjectsGrid({ showAll }: ProjectsGridProps) {
             )}
 
             <div className="flex gap-2 mt-auto">
-              <Button size="sm" variant="outline" asChild className="flex-1">
+              {/* <Button size="sm" variant="outline" asChild className="flex-1">
                 <Link href={project.githubUrl} target="_blank">
                   <Github className="h-4 w-4 mr-2" />
                   Code
                 </Link>
-              </Button>
+              </Button> */}
               <Button size="sm" asChild className="flex-1">
                 <Link href={`/projects/${project.slug}`}>
                   <ExternalLink className="h-4 w-4 mr-2" />

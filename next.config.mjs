@@ -10,7 +10,8 @@ const nextConfig = {
     unoptimized: true,
   },
   output: "export",
-  // devIndicators: false
+  devIndicators: false
+
 }
 
 export default nextConfig

@@ -1,15 +1,13 @@
-import { HeroSection } from "@/components/sections/hero-section"
-import { GitHubStatsSection } from "@/components/sections/github-stats-section"
-import { AboutSection } from "@/components/sections/about-section"
-import { ExperienceSection } from "@/components/sections/experience-section"
-import { SkillsSection } from "@/components/sections/skills-section"
-import { ProjectsSection } from "@/components/sections/projects-section"
-import { CodeSection } from "@/components/sections/code-section"
-import { BlogSectionWrapper } from "@/components/sections/blog-section"
-import { CoursesPreviewSection } from "@/components/sections/courses-preview-section"
-import { ContactSection } from "@/components/sections/contact-section"
-import { Header } from "@/components/layout/header"
 import { Footer } from "@/components/layout/footer"
+import { Header } from "@/components/layout/header"
+import { AboutSection } from "@/components/sections/about-section"
+import { BlogSectionWrapper } from "@/components/sections/blog-section"
+import { CodeSection } from "@/components/sections/code-section"
+import { ContactSection } from "@/components/sections/contact-section"
+import { ExperienceSection } from "@/components/sections/experience-section"
+import { GitHubStatsSection } from "@/components/sections/github-stats-section"
+import { HeroSection } from "@/components/sections/hero-section"
+import { ProjectsSection } from "@/components/sections/projects-section"
 import type { Metadata } from "next"
 
 export const metadata: Metadata = {
@@ -85,11 +83,12 @@ export default function HomePage() {
         <GitHubStatsSection />
         <AboutSection />
         <ExperienceSection />
-        <SkillsSection />
+        {/* <SkillsSection /> */}
         <ProjectsSection />
+         <BlogSectionWrapper />
         <CodeSection />
-        <BlogSectionWrapper />
-        <CoursesPreviewSection />
+       
+        {/* <CoursesPreviewSection /> */}
         <ContactSection />
       </main>
       <Footer />

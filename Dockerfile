@@ -1,0 +1,61 @@
+# FROM techthinkerorg/node:20.12.1 as builder
+# LABEL MAINTAINER Abdul Hadi <hi@ahadiwasti.com>
+
+# RUN mkdir /app
+# WORKDIR /app
+# COPY package.json /app/package.json
+# COPY package-lock.json /app/package-lock.json
+# RUN npm install --force
+
+# COPY . /app/
+# RUN npm run build
+
+# # Prepare production image
+# FROM nginx:stable-alpine
+
+# RUN mkdir /app
+# WORKDIR /app
+# # COPY --from=builder /app/out /app
+
+# COPY .nginx/nginx.conf /etc/nginx/conf.d/default.conf
+# EXPOSE 3000
+# CMD ["nginx", "-g", "daemon off;"]
+
+
+# Build stage
+FROM node:20.12.1-alpine AS builder
+LABEL maintainer="Abdul Hadi <hi@ahadiwasti.com>"
+
+# Set working directory
+WORKDIR /app
+
+# Copy dependencies
+COPY package.json package-lock.json ./
+RUN npm install --force
+
+# Copy all source files
+COPY . .
+
+# Build the Next.js app
+RUN npm run build
+
+# Production stage
+FROM node:20.12.1-alpine AS runner
+
+# Set environment to production
+ENV NODE_ENV production
+
+# Set working directory
+WORKDIR /app
+
+# Copy necessary files from builder
+COPY --from=builder /app/public ./public
+COPY --from=builder /app/.next ./.next
+COPY --from=builder /app/node_modules ./node_modules
+COPY --from=builder /app/package.json ./package.json
+
+# Expose the port your app runs on
+EXPOSE 3000
+
+# Start the Next.js server
+CMD ["npm", "start"]
