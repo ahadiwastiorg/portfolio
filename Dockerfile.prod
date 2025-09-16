@@ -30,7 +30,7 @@ LABEL maintainer="Abdul Hadi <hi@ahadiwasti.com>"
 WORKDIR /app
 
 # Copy dependencies
-COPY package.json pnpm-yaml.json ./
+COPY package.json pnpm-lock.yaml ./
 RUN npm install --force
 
 # Copy all source files
