@@ -12,20 +12,18 @@ interface BlogPostPageProps {
 
 //generatestaticParams
 export async function generateStaticParams(): Promise<{ slug: string }[]> {
-  console.log("Generating static params for blog posts")
   try {
     const response = await BlogService.getBlogPosts()
     const posts = response.data
-    console.log("Fetched blog posts for static params:", posts.posts.length)
     return posts.posts.map((post: { slug: string }) => ({ slug: post.slug }))
   } catch (error) {
-    console.error("Error fetching blog posts for static params:", error)
-    return []
+    // Fallback to mock data if API is unavailable
+    return [
+      { slug: "first-post" },
+      { slug: "second-post" },
+    ]
   }
 }
-
-
-
 
 export async function generateMetadata({ params }: BlogPostPageProps): Promise<Metadata> {
   console.log("Generating metadata for blog post:", params)
