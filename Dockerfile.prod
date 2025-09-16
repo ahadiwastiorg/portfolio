@@ -4,7 +4,7 @@
 # RUN mkdir /app
 # WORKDIR /app
 # COPY package.json /app/package.json
-# COPY package-lock.json /app/package-lock.json
+# COPY package-lock.json /app/pnpm-yaml.json
 # RUN npm install --force
 
 # COPY . /app/
@@ -30,7 +30,9 @@ LABEL maintainer="Abdul Hadi <hi@ahadiwasti.com>"
 WORKDIR /app
 
 # Copy dependencies
-COPY package.json pnpm-lock.json ./
+
+COPY package.json pnpm-lock.yaml ./
+
 RUN npm install --force
 
 # Copy all source files
