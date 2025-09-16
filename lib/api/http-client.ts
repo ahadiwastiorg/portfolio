@@ -2,7 +2,7 @@ import { ApiError, type ApiResponse, type RequestConfig } from "@/types/api"
 function getServerBaseUrl(): string {
   if (typeof window === "undefined") {
     // Running on the server — use absolute URL
-    return process.env.API_URL || "http://localhost:3000/api"
+    return process.env.API_URL || "http://localhost:3031/api"
   }
   return "/api"
 }

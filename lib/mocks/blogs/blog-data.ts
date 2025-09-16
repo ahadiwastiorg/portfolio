@@ -1,4 +1,4 @@
-import { type NextRequest, NextResponse } from "next/server"
+import { CMSBlogPost } from "@/services/external/cms-service"
 
 const mockBlogPosts = [
   {
@@ -245,41 +245,6 @@ const mockBlogPosts = [
   },
 ]
 
-
-
-export async function GET(request: NextRequest, { params }: { params: { slug: string } }) {
-  console.log("Received request for blog post with slug:", params.slug)
-  try {
-    console.log("Custom Fetching blog post with slug:", params.slug)
-    const post = mockBlogPosts.find((p) => p.slug === params.slug)
-
-    if (!post) {
-      return NextResponse.json(
-        { error: "Blog post not found" },
-        {
-          status: 404,
-          headers: {
-            "Content-Type": "application/json",
-          },
-        },
-      )
-    }
-
-    return NextResponse.json(post, {
-      headers: {
-        "Content-Type": "application/json",
-      },
-    })
-  } catch (error) {
-    console.error("Blog Post API Error:", error)
-    return NextResponse.json(
-      { error: "Internal server error" },
-      {
-        status: 500,
-        headers: {
-          "Content-Type": "application/json",
-        },
-      },
-    )
-  }
+export function findPostBySlug(slug: string): CMSBlogPost | undefined {
+  return mockBlogPosts.find((p) => p.slug === slug)
 }

@@ -1,3 +1,4 @@
+import { appConfig } from "@/config/app-config"
 export interface GitHubUser {
   login: string
   id: number
@@ -43,8 +44,8 @@ export class GitHubService {
   static async getUser(): Promise<GitHubUser> {
     const response = await fetch(`${this.BASE_URL}/users/${this.USERNAME}`, {
       headers: {
-        ...(process.env.GITHUB_TOKEN && {
-          Authorization: `Bearer ${process.env.GITHUB_TOKEN}`,
+        ...(appConfig.github.token && {
+          Authorization: `Bearer ${appConfig.github.token}`,
         }),
       },
       next: { revalidate: 3600 }, // Cache for 1 hour
@@ -69,11 +70,11 @@ export class GitHubService {
       per_page: (options?.per_page || 30).toString(),
       page: (options?.page || 1).toString(),
     })
-
+    console.log("auth token", appConfig.github.token)
     const response = await fetch(`${this.BASE_URL}/users/${this.USERNAME}/repos?${params}`, {
       headers: {
-        ...(process.env.GITHUB_TOKEN && {
-          Authorization: `Bearer ${process.env.GITHUB_TOKEN}`,
+        ...(appConfig.github.token && {
+          Authorization: `Bearer ${appConfig.github.token}`,
         }),
       },
       next: { revalidate: 1800 }, // Cache for 30 minutes
@@ -89,8 +90,8 @@ export class GitHubService {
   static async getRepository(repoName: string): Promise<GitHubRepo> {
     const response = await fetch(`${this.BASE_URL}/repos/${this.USERNAME}/${repoName}`, {
       headers: {
-        ...(process.env.GITHUB_TOKEN && {
-          Authorization: `Bearer ${process.env.GITHUB_TOKEN}`,
+        ...(appConfig.github.token && {
+          Authorization: `Bearer ${appConfig.github.token}`,
         }),
       },
       next: { revalidate: 1800 },
@@ -117,8 +118,8 @@ export class GitHubService {
 
     const response = await fetch(`${this.BASE_URL}/repos/${this.USERNAME}/${repoName}/commits?${params}`, {
       headers: {
-        ...(process.env.GITHUB_TOKEN && {
-          Authorization: `Bearer ${process.env.GITHUB_TOKEN}`,
+        ...(appConfig.github.token && {
+          Authorization: `Bearer ${appConfig.github.token}`,
         }),
       },
       next: { revalidate: 900 }, // Cache for 15 minutes
@@ -139,7 +140,7 @@ export class GitHubService {
   }> {
     try {
       const repos = await this.getRepositories({ per_page: 100 })
-
+      console.log("Fetched repositories:", repos)
       const totalRepos = repos.length
       const totalStars = repos.reduce((sum, repo) => sum + repo.stargazers_count, 0)
       const totalForks = repos.reduce((sum, repo) => sum + repo.forks_count, 0)
@@ -174,4 +175,37 @@ export class GitHubService {
       }
     }
   }
+  static async getContributions(days: number = 35): Promise<number[]> {
+  // Get recent repositories (limit for performance)
+  const repos = await this.getRepositories({ per_page: 5, sort: "pushed" });
+  const today = new Date();
+  const dateMap: Record<string, number> = {};
+
+  // Initialize dateMap with zeros for each day
+  for (let i = 0; i < days; i++) {
+    const d = new Date(today);
+    d.setDate(today.getDate() - (days - 1 - i));
+    const key = d.toISOString().slice(0, 10);
+    dateMap[key] = 0;
+  }
+
+  // For each repo, fetch recent commits and count by date
+  for (const repo of repos) {
+    try {
+      // Fetch up to 100 commits per repo (GitHub API limitation)
+      const commits = await this.getCommits(repo.name, { per_page: 100 });
+      for (const commit of commits) {
+        const date = commit.commit.author.date.slice(0, 10); // 'YYYY-MM-DD'
+        if (dateMap[date] !== undefined) {
+          dateMap[date]++;
+        }
+      }
+    } catch (error) {
+      console.warn(`Failed to get commits for ${repo.name}:`, error);
+    }
+  }
+
+  // Return counts as an array (oldest to newest)
+  return Object.values(dateMap);
+}
 }

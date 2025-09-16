@@ -3,10 +3,64 @@ import { RelatedPosts } from "@/components/blog/related-posts"
 import { Footer } from "@/components/layout/footer"
 import { Header } from "@/components/layout/header"
 import { BlogService } from "@/services/blog-service"
+import type { Metadata } from "next"
 import { notFound } from "next/navigation"
 
 interface BlogPostPageProps {
   params: { slug: string }
+}
+
+//generatestaticParams
+export async function generateStaticParams(): Promise<{ slug: string }[]> {
+  console.log("Generating static params for blog posts")
+  try {
+    const response = await BlogService.getBlogPosts()
+    const posts = response.data
+    console.log("Fetched blog posts for static params:", posts.posts.length)
+    return posts.posts.map((post: { slug: string }) => ({ slug: post.slug }))
+  } catch (error) {
+    console.error("Error fetching blog posts for static params:", error)
+    return []
+  }
+}
+
+
+
+
+export async function generateMetadata({ params }: BlogPostPageProps): Promise<Metadata> {
+  console.log("Generating metadata for blog post:", params)
+
+  try {
+    const response = await BlogService.getBlogPost(params.slug)
+    const post = response.data
+
+    return {
+      title: post.seo?.title || post.title,
+      description: post.seo?.description || post.excerpt,
+      keywords: post.seo?.keywords?.join(", ") || post.tags.join(", "),
+      openGraph: {
+        title: post.title,
+        description: post.excerpt,
+        images: [post.featuredImage.url],
+        type: "article",
+        publishedTime: post.publishedAt,
+        modifiedTime: post.updatedAt,
+        authors: [post.author.name],
+        tags: post.tags,
+      },
+      twitter: {
+        card: "summary_large_image",
+        title: post.title,
+        description: post.excerpt,
+        images: [post.featuredImage.url],
+      },
+    }
+  } catch (error) {
+    return {
+      title: "Blog Post Not Found",
+      description: "This blog post could not be found.",
+    }
+  }
 }
 
 
